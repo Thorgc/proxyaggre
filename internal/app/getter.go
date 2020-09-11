@@ -4,12 +4,12 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/zu1k/proxypool/internal/cache"
+	"github.com/oouxx/proxyaggre/internal/cache"
 
 	"github.com/ghodss/yaml"
 
-	"github.com/zu1k/proxypool/config"
-	"github.com/zu1k/proxypool/pkg/getter"
+	"github.com/oouxx/proxyaggre/config"
+	"github.com/oouxx/proxyaggre/pkg/getter"
 )
 
 var Getters = make([]getter.Getter, 0)

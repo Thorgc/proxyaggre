@@ -5,9 +5,9 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/zu1k/proxypool/pkg/tool"
+	"github.com/oouxx/proxyaggre/pkg/tool"
 
-	"github.com/zu1k/proxypool/pkg/proxy"
+	"github.com/oouxx/proxyaggre/pkg/proxy"
 )
 
 type SSSub struct {

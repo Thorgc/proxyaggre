@@ -14,8 +14,8 @@ jobs:
       - name: Build and push Docker images
         uses: docker/build-push-action@v2
         with:
-          username: zu1k
-          password: ${{ secrets.GITHUB_TOKEN }}
+          username: oouxx
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
           registry: docker.pkg.github.com
-          repository: zu1k/proxypool/proxypool
+          repository: oouxx/proxyaggre/poryxaggre
           tag_with_ref: true
