@@ -56,7 +56,7 @@ $ go get -u -v github.com/oouxx/proxyaggre
 ### 使用docker
 
 ```sh
-docker pull docker.pkg.github.com/oouxx/proxyaggre/proxypool:latest
+docker pull docker.pkg.github.com/oouxx/proxyaggre/proxyaggre:latest
 ```
 
 ## 使用
