@@ -30,7 +30,7 @@ jobs:
           push: true
           tags: oouxx/proxyaggre:latest
           secrets:
-            - GITHUB_AUTH_TOKEN=${{github.token}}
+            GITHUB_AUTH_TOKEN=${{github.token}}
 
       - name: Image digest
         run: echo ${{steps.docker_build.outputs.digest}}
