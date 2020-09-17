@@ -2,7 +2,7 @@
 domain: example.com
 
 # database url
-database_url: "postgresql://oouxx:wxx1512@47.94.14.86/proxyaggre"
+database_url: ""
 # cloudflare api
 cf_email: ""
 cf_key: ""
