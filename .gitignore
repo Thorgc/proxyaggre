@@ -21,3 +21,5 @@ vendor
 # macOS file
 .DS_Store
 
+
+.vercel
