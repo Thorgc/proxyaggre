@@ -1,237 +1,89 @@
 package api
 
+
 import (
-	"github.com/gin-contrib/cache"
-	"github.com/gin-contrib/cache/persistence"
-	"github.com/gin-gonic/gin"
-	"github.com/oouxx/proxyaggre/config"
-	binhtml "github.com/oouxx/proxyaggre/internal/bindata/html"
+	"fmt"
+	"github.com/gorilla/mux"
 	C "github.com/oouxx/proxyaggre/internal/cache"
+	"github.com/oouxx/proxyaggre/internal/cron"
+	_ "github.com/oouxx/proxyaggre/internal/cron"
 	"github.com/oouxx/proxyaggre/pkg/provider"
-	"html/template"
+	"log"
 	"net/http"
-	"os"
-	"strconv"
 	"time"
 )
 
-const version = "v0.3.10"
 
-var router *gin.Engine
-
-
-func setupRouter() {
-	gin.SetMode(gin.ReleaseMode)
-	router = gin.New()
-	store := persistence.NewInMemoryStore(time.Minute)
-	router.Use(gin.Recovery(), cache.SiteCache(store, time.Minute))
-	temp, err := loadTemplate()
-	if err != nil {
-		panic(err)
-	}
-	router.SetHTMLTemplate(temp)
-
-	router.GET("/", func(c *gin.Context) {
-		c.HTML(http.StatusOK, "assets/html/index.html", gin.H{
-			"domain":               config.Config.Domain,
-			"getters_count":        C.GettersCount,
-			"all_proxies_count":    C.AllProxiesCount,
-			"ss_proxies_count":     C.SSProxiesCount,
-			"ssr_proxies_count":    C.SSRProxiesCount,
-			"vmess_proxies_count":  C.VmessProxiesCount,
-			"trojan_proxies_count": C.TrojanProxiesCount,
-			"useful_proxies_count": C.UsefullProxiesCount,
-			"last_crawl_time":      C.LastCrawlTime,
-			"version":              version,
-		})
-	})
-
-	router.GET("/clash", func(c *gin.Context) {
-		c.HTML(http.StatusOK, "assets/html/clash.html", gin.H{
-			"domain": config.Config.Domain,
-		})
-	})
-
-	router.GET("/surge", func(c *gin.Context) {
-		c.HTML(http.StatusOK, "assets/html/surge.html", gin.H{
-			"domain": config.Config.Domain,
-		})
-	})
-
-	router.GET("/clash/config", func(c *gin.Context) {
-		c.HTML(http.StatusOK, "assets/html/clash-config.yaml", gin.H{
-			"domain": config.Config.Domain,
-		})
-	})
-
-	router.GET("/surge/config", func(c *gin.Context) {
-		c.HTML(http.StatusOK, "assets/html/surge.conf", gin.H{
-			"domain": config.Config.Domain,
-		})
-	})
-
-	router.GET("/clash/proxies", func(c *gin.Context) {
-		proxyTypes := c.DefaultQuery("type", "")
-		proxyCountry := c.DefaultQuery("c", "")
-		proxyNotCountry := c.DefaultQuery("nc", "")
-		text := ""
-		if proxyTypes == "" && proxyCountry == "" && proxyNotCountry == "" {
-			text = C.GetString("clashproxies")
-			if text == "" {
-				proxies := C.GetProxies("proxies")
-				clash := provider.Clash{
-					provider.Base{
-						Proxies: &proxies,
-					},
-				}
-				text = clash.Provide()
-				C.SetString("clashproxies", text)
-			}
-		} else if proxyTypes == "all" {
-			proxies := C.GetProxies("allproxies")
-			clash := provider.Clash{
-				provider.Base{
-					Proxies:    &proxies,
-					Types:      proxyTypes,
-					Country:    proxyCountry,
-					NotCountry: proxyNotCountry,
-				},
-			}
-			text = clash.Provide()
-		} else {
-			proxies := C.GetProxies("proxies")
-			clash := provider.Clash{
-				provider.Base{
-					Proxies:    &proxies,
-					Types:      proxyTypes,
-					Country:    proxyCountry,
-					NotCountry: proxyNotCountry,
-				},
-			}
-			text = clash.Provide()
-		}
-		c.String(200, text)
-	})
-
-	router.GET("/surge/proxies", func(c *gin.Context) {
-		proxyTypes := c.DefaultQuery("type", "")
-		proxyCountry := c.DefaultQuery("c", "")
-		proxyNotCountry := c.DefaultQuery("nc", "")
-		text := ""
-		if proxyTypes == "" && proxyCountry == "" && proxyNotCountry == "" {
-			text = C.GetString("surgeproxies")
-			if text == "" {
-				proxies := C.GetProxies("proxies")
-				surge := provider.Surge{
-					provider.Base{
-						Proxies: &proxies,
-					},
-				}
-				text = surge.Provide()
-				C.SetString("surgeproxies", text)
-			}
-		} else if proxyTypes == "all" {
-			proxies := C.GetProxies("allproxies")
-			surge := provider.Surge{
-				provider.Base{
-					Proxies:    &proxies,
-					Types:      proxyTypes,
-					Country:    proxyCountry,
-					NotCountry: proxyNotCountry,
-				},
-			}
-			text = surge.Provide()
-		} else {
-			proxies := C.GetProxies("proxies")
-			surge := provider.Surge{
-				provider.Base{
-					Proxies:    &proxies,
-					Types:      proxyTypes,
-					Country:    proxyCountry,
-					NotCountry: proxyNotCountry,
-				},
-			}
-			text = surge.Provide()
-		}
-		c.String(200, text)
-	})
-
-	router.GET("/ss/sub", func(c *gin.Context) {
-		proxies := C.GetProxies("proxies")
-		ssSub := provider.SSSub{
-			provider.Base{
-				Proxies: &proxies,
-				Types:   "ss",
-			},
-		}
-		c.String(200, ssSub.Provide())
-	})
-
-	router.GET("/ssr/sub", func(c *gin.Context) {
-		proxies := C.GetProxies("proxies")
-		ssrSub := provider.SSRSub{
-			provider.Base{
-				Proxies: &proxies,
-				Types:   "ssr",
-			},
-		}
-		c.String(200, ssrSub.Provide())
-	})
-
-	router.GET("/vmess/sub", func(c *gin.Context) {
-		proxies := C.GetProxies("proxies")
-		vmessSub := provider.VmessSub{
-			provider.Base{
-				Proxies: &proxies,
-				Types:   "vmess",
-			},
-		}
-		c.String(200, vmessSub.Provide())
-	})
-
-	router.GET("/sip002/sub", func(c *gin.Context) {
-		proxies := C.GetProxies("proxies")
-		sip002Sub := provider.SIP002Sub{
-			provider.Base{
-				Proxies: &proxies,
-				Types:   "ss",
-			},
-		}
-		c.String(200, sip002Sub.Provide())
-	})
-
-	router.GET("/link/:id", func(c *gin.Context) {
-		idx := c.Param("id")
-		proxies := C.GetProxies("allproxies")
-		id, err := strconv.Atoi(idx)
-		if err != nil {
-			c.String(500, err.Error())
-		}
-		if id >= proxies.Len() || id < 0 {
-			c.String(500, "id out of range")
-		}
-		c.String(200, proxies[id].Link())
-	})
+// GetRouter returns the router for the API
+func GetRouter() *mux.Router {
+	r := mux.NewRouter()
+	r.HandleFunc("/", index).Methods(http.MethodGet)
+	r.HandleFunc("/vmess/sub", vmessSub).Methods(http.MethodGet)
+	r.HandleFunc("/ss/sub", ssSub).Methods(http.MethodGet)
+	r.HandleFunc("/ssr/sub", ssrSub).Methods(http.MethodGet)
+	r.HandleFunc("/sip002/sub", sip002ub).Methods(http.MethodGet)
+	r.HandleFunc("/cron", runCron).Methods(http.MethodGet)
+	return r
 }
-
 func Run() {
-	setupRouter()
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "8080"
+	s := &http.Server{
+		Addr:         fmt.Sprintf("0.0.0.0:%s", "8080"),
+		ReadTimeout:  5 * time.Second,
+		WriteTimeout: 1 * time.Second,
+		IdleTimeout:  1 * time.Minute,
+		Handler:      GetRouter(),
 	}
-	router.Run(":" + port)
+	log.Printf("Listening on %s", s.Addr)
+	log.Fatal(s.ListenAndServe())
 }
 
-func loadTemplate() (t *template.Template, err error) {
-	_ = binhtml.RestoreAssets("", "assets/html")
-	t = template.New("")
-	for _, fileName := range binhtml.AssetNames() {
-		data := binhtml.MustAsset(fileName)
-		t, err = t.New(fileName).Parse(string(data))
-		if err != nil {
-			return nil, err
-		}
+func index(w http.ResponseWriter, r *http.Request){
+	fmt.Fprintf(w, "<h1>哈喽啊!首页待完善</h1>")
+}
+
+func vmessSub(w http.ResponseWriter, r *http.Request){
+	proxies := C.GetProxies("proxies")
+	vmessSub := provider.VmessSub{
+		provider.Base{
+			Proxies: &proxies,
+			Types:   "vmess",
+		},
 	}
-	return t, nil
+	fmt.Fprintf(w, vmessSub.Provide())
+}
+func ssSub(w http.ResponseWriter, r *http.Request){
+	proxies := C.GetProxies("proxies")
+	ssSub := provider.SSSub{
+		provider.Base{
+			Proxies: &proxies,
+			Types:   "ss",
+		},
+	}
+	fmt.Fprintf(w, ssSub.Provide())
+}
+
+func ssrSub(w http.ResponseWriter, r *http.Request){
+	proxies := C.GetProxies("proxies")
+	ssrSub := provider.SSRSub{
+		provider.Base{
+			Proxies: &proxies,
+			Types: "ssr",
+		},
+	}
+	fmt.Fprint(w, ssrSub.Provide())
+}
+func sip002ub(w http.ResponseWriter, r *http.Request){
+	proxies := C.GetProxies("proxies")
+	sip002Sub := provider.SIP002Sub{
+		provider.Base{
+			Proxies: &proxies,
+			Types: "ss",
+		},
+	}
+	fmt.Fprint(w, sip002Sub.Provide())
+}
+
+func runCron(w http.ResponseWriter, r *http.Request){
+	cron.CrawlTask()
+	fmt.Fprintf(w, "<h1>正在运行cron任务</h1>")
 }

@@ -2,7 +2,6 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"github.com/oouxx/proxyaggre/api"
 	"github.com/oouxx/proxyaggre/internal/app"
 	"github.com/oouxx/proxyaggre/pkg/proxy"
@@ -34,8 +33,8 @@ func main() {
 
 	//database.InitTables()
 	proxy.InitGeoIpDB()
-	fmt.Println("Do the first crawl...")
-	go app.CrawlGo()
+	//fmt.Println("Do the first crawl...")
+	//go app.CrawlGo()
 	//go cron.Cron()
 	api.Run()
 }
