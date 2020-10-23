@@ -3,15 +3,12 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/oouxx/proxyaggre/internal/database"
+	"github.com/oouxx/proxyaggre/api"
+	"github.com/oouxx/proxyaggre/internal/app"
+	"github.com/oouxx/proxyaggre/pkg/proxy"
 	"net/http"
 	_ "net/http/pprof"
 	"os"
-
-	"github.com/oouxx/proxyaggre/api"
-	"github.com/oouxx/proxyaggre/internal/app"
-	"github.com/oouxx/proxyaggre/internal/cron"
-	"github.com/oouxx/proxyaggre/pkg/proxy"
 )
 
 var configFilePath = ""
@@ -35,10 +32,10 @@ func main() {
 		panic(err)
 	}
 
-	database.InitTables()
+	//database.InitTables()
 	proxy.InitGeoIpDB()
 	fmt.Println("Do the first crawl...")
 	go app.CrawlGo()
-	go cron.Cron()
+	//go cron.Cron()
 	api.Run()
 }
