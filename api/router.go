@@ -11,7 +11,6 @@ import (
 	"github.com/gin-contrib/cache"
 	"github.com/gin-contrib/cache/persistence"
 	"github.com/gin-gonic/gin"
-	_ "github.com/heroku/x/hmetrics/onload"
 	"github.com/oouxx/proxyaggre/config"
 	binhtml "github.com/oouxx/proxyaggre/internal/bindata/html"
 	C "github.com/oouxx/proxyaggre/internal/cache"
