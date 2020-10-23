@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"github.com/oouxx/proxyaggre/internal/database"
 	"net/http"
 	_ "net/http/pprof"
 	"os"
@@ -10,7 +11,6 @@ import (
 	"github.com/oouxx/proxyaggre/api"
 	"github.com/oouxx/proxyaggre/internal/app"
 	"github.com/oouxx/proxyaggre/internal/cron"
-	"github.com/oouxx/proxyaggre/internal/database"
 	"github.com/oouxx/proxyaggre/pkg/proxy"
 )
 

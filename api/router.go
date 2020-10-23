@@ -1,6 +1,7 @@
 package api
 
 import (
+	"fmt"
 	"html/template"
 	"net/http"
 	"os"
@@ -20,6 +21,11 @@ import (
 const version = "v0.3.10"
 
 var router *gin.Engine
+
+func Handler(w http.ResponseWriter, r *http.Request) {
+	fmt.Println(*r)
+	fmt.Println("handler......")
+}
 
 func setupRouter() {
 	gin.SetMode(gin.ReleaseMode)
