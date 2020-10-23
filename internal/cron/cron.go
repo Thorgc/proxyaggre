@@ -2,7 +2,6 @@ package cron
 
 import (
 	"runtime"
-
 	"github.com/oouxx/proxyaggre/internal/app"
 )
 
