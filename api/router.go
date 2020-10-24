@@ -14,11 +14,11 @@ import (
 func GetRouter() *mux.Router {
 	r := mux.NewRouter()
 	r.HandleFunc("/", Index).Methods(http.MethodGet)
-	r.HandleFunc("/vmess/sub", VmessSub).Methods(http.MethodGet)
-	r.HandleFunc("/ss/sub", SsSub).Methods(http.MethodGet)
-	r.HandleFunc("/ssr/sub", SsrSub).Methods(http.MethodGet)
-	r.HandleFunc("/sip002/sub", Sip002ub).Methods(http.MethodGet)
-	r.HandleFunc("/cron", RunCron).Methods(http.MethodGet)
+	r.HandleFunc("/vmess/sub", vmessSub).Methods(http.MethodGet)
+	r.HandleFunc("/ss/sub", ssSub).Methods(http.MethodGet)
+	r.HandleFunc("/ssr/sub", ssrSub).Methods(http.MethodGet)
+	r.HandleFunc("/sip002/sub", sip002ub).Methods(http.MethodGet)
+	r.HandleFunc("/cron", runCron).Methods(http.MethodGet)
 	return r
 }
 
@@ -26,7 +26,7 @@ func Index(w http.ResponseWriter, r *http.Request){
 	fmt.Fprintf(w, "<h1>哈喽啊!首页待完善</h1>")
 }
 
-func VmessSub(w http.ResponseWriter, r *http.Request){
+func vmessSub(w http.ResponseWriter, r *http.Request){
 	proxies := C.GetProxies("proxies")
 	vmessSub := provider.VmessSub{
 		provider.Base{
@@ -36,7 +36,7 @@ func VmessSub(w http.ResponseWriter, r *http.Request){
 	}
 	fmt.Fprintf(w, vmessSub.Provide())
 }
-func SsSub(w http.ResponseWriter, r *http.Request){
+func ssSub(w http.ResponseWriter, r *http.Request){
 	proxies := C.GetProxies("proxies")
 	ssSub := provider.SSSub{
 		provider.Base{
@@ -47,7 +47,7 @@ func SsSub(w http.ResponseWriter, r *http.Request){
 	fmt.Fprintf(w, ssSub.Provide())
 }
 
-func SsrSub(w http.ResponseWriter, r *http.Request){
+func ssrSub(w http.ResponseWriter, r *http.Request){
 	proxies := C.GetProxies("proxies")
 	ssrSub := provider.SSRSub{
 		provider.Base{
@@ -57,7 +57,7 @@ func SsrSub(w http.ResponseWriter, r *http.Request){
 	}
 	fmt.Fprint(w, ssrSub.Provide())
 }
-func Sip002ub(w http.ResponseWriter, r *http.Request){
+func sip002ub(w http.ResponseWriter, r *http.Request){
 	proxies := C.GetProxies("proxies")
 	sip002Sub := provider.SIP002Sub{
 		provider.Base{
@@ -68,7 +68,7 @@ func Sip002ub(w http.ResponseWriter, r *http.Request){
 	fmt.Fprint(w, sip002Sub.Provide())
 }
 
-func RunCron(w http.ResponseWriter, r *http.Request){
+func runCron(w http.ResponseWriter, r *http.Request){
 	cron.CrawlTask()
 	fmt.Fprintf(w, "<h1>正在运行cron任务</h1>")
 }
