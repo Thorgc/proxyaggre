@@ -6,6 +6,7 @@ import (
 	C "github.com/oouxx/proxyaggre/internal/cache"
 	"github.com/oouxx/proxyaggre/internal/cron"
 	"github.com/oouxx/proxyaggre/pkg/provider"
+	"log"
 	"net/http"
 )
 
@@ -13,12 +14,7 @@ import (
 // GetRouter returns the router for the API
 func GetRouter() *mux.Router {
 	r := mux.NewRouter()
-	r.HandleFunc("/", Index).Methods(http.MethodGet)
-	r.HandleFunc("/vmess/sub", vmessSub).Methods(http.MethodGet)
-	r.HandleFunc("/ss/sub", ssSub).Methods(http.MethodGet)
-	r.HandleFunc("/ssr/sub", ssrSub).Methods(http.MethodGet)
-	r.HandleFunc("/sip002/sub", sip002ub).Methods(http.MethodGet)
-	r.HandleFunc("/cron", runCron).Methods(http.MethodGet)
+	r.HandleFunc("/", Handler).Methods(http.MethodGet)
 	return r
 }
 
@@ -71,4 +67,29 @@ func sip002ub(w http.ResponseWriter, r *http.Request){
 func runCron(w http.ResponseWriter, r *http.Request){
 	cron.CrawlTask()
 	fmt.Fprintf(w, "<h1>正在运行cron任务</h1>")
+}
+
+func respond(w http.ResponseWriter, r *http.Request, body []byte, err error) {
+	switch err {
+	case nil:
+		w.Write(body)
+	default:
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+	return
+}
+
+func marshal(w http.ResponseWriter, r *http.Request, result string) (body []byte, err error){
+	w.Header().Set("Content-Type", "text/plain")
+	return []byte(result), nil
+}
+
+func resolver(r *http.Request) string{
+	return "hello"
+}
+func Handler(w http.ResponseWriter, r *http.Request) {
+	log.Println(*r)
+	body, err := marshal(w, r, resolver(r))
+	respond(w, r, body, err)
 }

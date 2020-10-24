@@ -34,10 +34,10 @@ func main() {
 	proxy.InitGeoIpDB()
 	//go app.CrawlGo()
 	//go cron.Cron()
-	Run()
+	run()
 }
 
-func Run() {
+func run() {
 	s := &http.Server{
 		Addr:         fmt.Sprintf("0.0.0.0:%s", "8080"),
 		ReadTimeout:  5 * time.Second,
