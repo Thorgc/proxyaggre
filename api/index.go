@@ -18,10 +18,6 @@ func GetRouter() *mux.Router {
 	return r
 }
 
-func Index(w http.ResponseWriter, r *http.Request){
-	fmt.Fprintf(w, "<h1>哈喽啊!首页待完善</h1>")
-}
-
 func vmessSub(w http.ResponseWriter, r *http.Request){
 	proxies := C.GetProxies("proxies")
 	vmessSub := provider.VmessSub{

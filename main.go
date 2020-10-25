@@ -29,11 +29,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-
-	//database.InitTables()
 	proxy.InitGeoIpDB()
-	//go app.CrawlGo()
-	//go cron.Cron()
 	run()
 }
 
