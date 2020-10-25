@@ -15,6 +15,7 @@ import (
 func GetRouter() *mux.Router {
 	r := mux.NewRouter()
 	r.HandleFunc("/", Handler).Methods(http.MethodGet)
+	r.HandleFunc("/vmess/sub", vmessSub).Methods(http.MethodGet)
 	return r
 }
 
