@@ -14,7 +14,7 @@ import (
 // GetRouter returns the router for the API
 func GetRouter() *mux.Router {
 	r := mux.NewRouter()
-	r.HandleFunc("/", Handler).Methods(http.MethodGet)
+	r.HandleFunc("/sub", Handler).Methods(http.MethodGet)
 	r.HandleFunc("/vmess/sub", vmessSub).Methods(http.MethodGet)
 	return r
 }
