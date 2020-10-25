@@ -18,7 +18,7 @@ func GetRouter() *mux.Router {
 	return r
 }
 
-func VmessSub(w http.ResponseWriter, r *http.Request){
+func vmessSub() (subString string){
 	proxies := C.GetProxies("proxies")
 	vmessSub := provider.VmessSub{
 		provider.Base{
@@ -26,9 +26,9 @@ func VmessSub(w http.ResponseWriter, r *http.Request){
 			Types:   "vmess",
 		},
 	}
-	fmt.Fprintf(w, vmessSub.Provide())
+	return vmessSub.Provide()
 }
-func ssSub(w http.ResponseWriter, r *http.Request){
+func ssSub() (subString string){
 	proxies := C.GetProxies("proxies")
 	ssSub := provider.SSSub{
 		provider.Base{
@@ -36,10 +36,10 @@ func ssSub(w http.ResponseWriter, r *http.Request){
 			Types:   "ss",
 		},
 	}
-	fmt.Fprintf(w, ssSub.Provide())
+	return ssSub.Provide()
 }
 
-func ssrSub(w http.ResponseWriter, r *http.Request){
+func ssrSub() (subString string){
 	proxies := C.GetProxies("proxies")
 	ssrSub := provider.SSRSub{
 		provider.Base{
@@ -47,9 +47,9 @@ func ssrSub(w http.ResponseWriter, r *http.Request){
 			Types: "ssr",
 		},
 	}
-	fmt.Fprint(w, ssrSub.Provide())
+	return ssrSub.Provide()
 }
-func sip002ub(w http.ResponseWriter, r *http.Request){
+func sip002ub() (subString string){
 	proxies := C.GetProxies("proxies")
 	sip002Sub := provider.SIP002Sub{
 		provider.Base{
@@ -57,12 +57,12 @@ func sip002ub(w http.ResponseWriter, r *http.Request){
 			Types: "ss",
 		},
 	}
-	fmt.Fprint(w, sip002Sub.Provide())
+	return sip002Sub.Provide()
 }
 
-func runCron(w http.ResponseWriter, r *http.Request){
+func runCron(){
 	cron.CrawlTask()
-	fmt.Fprintf(w, "<h1>正在运行cron任务</h1>")
+	fmt.Println("cron job is running")
 }
 
 func respond(w http.ResponseWriter, r *http.Request, body []byte, err error) {
@@ -82,7 +82,8 @@ func marshal(w http.ResponseWriter, r *http.Request, result string) (body []byte
 }
 
 func resolver(r *http.Request) string{
-	return "hello"
+	runCron()
+	return vmessSub()
 }
 func Handler(w http.ResponseWriter, r *http.Request) {
 	log.Println(*r)
