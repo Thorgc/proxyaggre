@@ -1,8 +1,10 @@
 package cron
 
 import (
-	"runtime"
 	"github.com/oouxx/proxyaggre/internal/app"
+	"log"
+	"os"
+	"runtime"
 )
 
 //func Cron() {
@@ -11,7 +13,9 @@ import (
 //}
 
 func CrawlTask() {
-	_ = app.InitConfigAndGetters("")
+	var configFilePath = os.Getenv("CONFIG_FILE")
+	log.Println(configFilePath)
+	_ = app.InitConfigAndGetters(configFilePath)
 	app.CrawlGo()
 	app.Getters = nil
 	runtime.GC()

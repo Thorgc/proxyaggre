@@ -23,9 +23,7 @@ func main() {
 		configFilePath = os.Getenv("CONFIG_FILE")
 	}
 	if configFilePath == "" {
-		// for log
-		configFilePath = "https://raw.githubusercontent.com/oouxx/fqsub/master/config.yaml"
-		//configFilePath = "config.yaml"
+		configFilePath = "config.yaml"
 	}
 	err := app.InitConfigAndGetters(configFilePath)
 	if err != nil {
