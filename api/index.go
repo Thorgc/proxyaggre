@@ -82,8 +82,9 @@ func marshal(w http.ResponseWriter, r *http.Request, result string) (body []byte
 }
 
 func resolver(r *http.Request) string{
-	runCron()
-	return vmessSub()
+	//runCron()
+	//return vmessSub()
+	return "hello vercel"
 }
 func Handler(w http.ResponseWriter, r *http.Request) {
 	log.Println(*r)
