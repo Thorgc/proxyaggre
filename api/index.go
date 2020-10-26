@@ -1,10 +1,8 @@
 package api
 
 import (
-	"fmt"
 	"github.com/gorilla/mux"
 	C "github.com/oouxx/proxyaggre/internal/cache"
-	"github.com/oouxx/proxyaggre/internal/cron"
 	"github.com/oouxx/proxyaggre/pkg/provider"
 	"log"
 	"net/http"
@@ -60,11 +58,6 @@ func sip002ub() (subString string){
 	return sip002Sub.Provide()
 }
 
-func runCron(){
-	cron.CrawlTask()
-	fmt.Println("cron job is running")
-}
-
 func respond(w http.ResponseWriter, r *http.Request, body []byte, err error) {
 	switch err {
 	case nil:
@@ -82,9 +75,7 @@ func marshal(w http.ResponseWriter, r *http.Request, result string) (body []byte
 }
 
 func resolver(r *http.Request) string{
-	//runCron()
-	//return vmessSub()
-	return "hello vercel"
+	return vmessSub()
 }
 func Handler(w http.ResponseWriter, r *http.Request) {
 	log.Println(*r)

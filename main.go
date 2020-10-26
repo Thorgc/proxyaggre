@@ -30,6 +30,7 @@ func main() {
 		panic(err)
 	}
 	proxy.InitGeoIpDB()
+	app.CrawlGo()
 	run()
 }
 
