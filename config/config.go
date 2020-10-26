@@ -3,6 +3,7 @@ package config
 import (
 	"errors"
 	"io/ioutil"
+	"log"
 	"os"
 	"strings"
 
@@ -30,6 +31,9 @@ func Parse(path string) error {
 	} else {
 		configFilePath = path
 	}
+	// for log
+	log.Println(path)
+
 	fileData, err := ReadFile(path)
 	if err != nil {
 		return err
