@@ -31,7 +31,6 @@ func main() {
 	}
 	proxy.InitGeoIpDB()
 	app.CrawlGo()
-	run()
 }
 
 func run() {
