@@ -8,5 +8,5 @@ import (
 
 func CronHandler(w http.ResponseWriter, r *http.Request){
 	cron.CrawlTask()
-	fmt.Fprintf(w, "<h2>Cron job is running.</h2>")
+	fmt.Fprintf(w, "Cron job is running.")
 }
