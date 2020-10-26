@@ -2,7 +2,7 @@ package cron
 
 import (
 	"github.com/oouxx/proxyaggre/internal/app"
-	"log"
+	"github.com/oouxx/proxyaggre/pkg/proxy"
 	"os"
 	"runtime"
 )
@@ -14,7 +14,8 @@ import (
 
 func CrawlTask() {
 	var configFilePath = os.Getenv("CONFIG_FILE")
-	log.Println(configFilePath)
+	// 初始化geoip db
+	proxy.InitGeoIpDB()
 	_ = app.InitConfigAndGetters(configFilePath)
 	app.CrawlGo()
 	app.Getters = nil
