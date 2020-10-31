@@ -2,6 +2,8 @@ package getter
 
 import (
 	"errors"
+	"fmt"
+	"github.com/Dreamacro/clash/config"
 	"sync"
 
 	"github.com/oouxx/proxyaggre/pkg/proxy"
@@ -68,5 +70,18 @@ func AssertTypeStringNotNull(i interface{}) (str string, err error) {
 	default:
 		return "", errors.New("type is not string")
 	}
-	return "", nil
+}
+// parse clash config
+func ParseClashProxyFromYamlConfig(buf []byte) proxy.ProxyList{
+	clashConfig, err := config.Parse(buf)
+	if err != nil{
+		return nil
+	}
+	for _, v := range clashConfig.Proxies {
+		if v.Type().String() == "Vmess" {
+			fmt.Println(v.Type())
+		}
+	}
+
+	return proxy.ProxyList{}
 }

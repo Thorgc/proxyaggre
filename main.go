@@ -3,7 +3,6 @@ package main
 import (
 	"flag"
 	"fmt"
-	"net/http"
 	_ "net/http/pprof"
 	"os"
 
@@ -17,10 +16,7 @@ import (
 var configFilePath = ""
 
 func main() {
-	go func() {
-		http.ListenAndServe("0.0.0.0:6060", nil)
-	}()
-
+	// support -c config file path
 	flag.StringVar(&configFilePath, "c", "", "path to config file: config.yaml")
 	flag.Parse()
 

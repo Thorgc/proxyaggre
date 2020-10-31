@@ -182,18 +182,28 @@ func setupRouter() {
 	router.GET("/vmess/sub", func(c *gin.Context) {
 		proxies := C.GetProxies("proxies")
 		vmessSub := provider.VmessSub{
-			provider.Base{
+			Base: provider.Base{
 				Proxies: &proxies,
 				Types:   "vmess",
 			},
 		}
 		c.String(200, vmessSub.Provide())
 	})
+	router.GET("/trojan/sub", func(c *gin.Context) {
+		proxies := C.GetProxies("proxies")
+		trojanSub := provider.TrojanSub{
+			Base: provider.Base{
+				Proxies: &proxies,
+				Types:   "vmess",
+			},
+		}
+		c.String(200, trojanSub.Provide())
+	})
 
 	router.GET("/sip002/sub", func(c *gin.Context) {
 		proxies := C.GetProxies("proxies")
 		sip002Sub := provider.SIP002Sub{
-			provider.Base{
+			Base: provider.Base{
 				Proxies: &proxies,
 				Types:   "ss",
 			},

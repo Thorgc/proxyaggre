@@ -1,42 +1,7 @@
 # 模糊抓取订阅链接
-#- type: webfuzzsub
-#  options:
-#    url: https://raw.githubusercontent.com/du5/free/master/sub.list
-
-- type: subscribe
+- type: webfuzzsub
   options:
-    url: https://raw.githubusercontent.com/ssrsub/ssr/master/v2ray
-- type: subscribe
-  options:
-    url: https://raw.githubusercontent.com/ssrsub/ssr/master/ss-sub
-
-- type: subscribe
-  options:
-    url: https://raw.githubusercontent.com/pojiezhiyuanjun/freev2/master/20200901.txt
-
-- type: subscribe
-  options:
-    url: https://raw.githubusercontent.com/pojiezhiyuanjun/freev2/master/20200902.txt
-
-- type: subscribe
-  options:
-    url: https://raw.githubusercontent.com/pojiezhiyuanjun/freev2/master/20200904.txt
-
-- type: subscribe
-  options:
-    url: https://raw.githubusercontent.com/pojiezhiyuanjun/freev2/master/20200909.txt
-
-- type: subscribe
-  options:
-    url: https://raw.githubusercontent.com/pojiezhiyuanjun/freev2/master/20200911.txt
-
-- type: subscribe
-  options:
-    url: https://raw.githubusercontent.com/pojiezhiyuanjun/freev2/master/20200911.txt
-
-- type: subscribe
-  options:
-    url: https://fqsub.oouxx.workers.dev
+    url: https://raw.githubusercontent.com/oouxx/fqsub/master/sub.list
 
 # 网页模糊抓取
 #- type: webfuzz
@@ -47,13 +12,10 @@
 - type: tgchannel
   options:
     channel: fqshare
-    num: 200
+    num: 300
 
 # 翻墙党论坛抓取
 #- type: web-fanqiangdang
 #  options:
 #    url: https://fanqiangdang.com/forum-48-1.html
 
-# 某个网站抓取
-- type: web-freessrxyz
-  options:
