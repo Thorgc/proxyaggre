@@ -7,7 +7,7 @@ import (
 	"github.com/oouxx/proxyaggre/pkg/proxy"
 )
 
-var c = cache.New(cache.NoExpiration, 10*time.Minute)
+var c = cache.New(24*time.Hour, 24*time.Hour)
 
 func GetProxies(key string) proxy.ProxyList {
 	result, found := c.Get(key)
@@ -18,11 +18,11 @@ func GetProxies(key string) proxy.ProxyList {
 }
 
 func SetProxies(key string, proxies proxy.ProxyList) {
-	c.Set(key, proxies, cache.NoExpiration)
+	c.Set(key, proxies, 0)
 }
 
 func SetString(key, value string) {
-	c.Set(key, value, cache.NoExpiration)
+	c.Set(key, value, 0)
 }
 
 func GetString(key string) string {
